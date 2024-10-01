@@ -1,5 +1,4 @@
-
-#include "FunExt.h"
+﻿#include "CMakeProject1.h"
 
 using namespace std;
 
@@ -7,8 +6,8 @@ int main()
 {
 	int a;
 	int b;
-	scanf("%d", &a);
-	scanf("%d", &b);
+	scanf_s("%d", &a);
+	scanf_s("%d", &b);
 	int obvodA = 4 * a;
 	int obsahA = a ^ 2;
 	int obvodB = 4 * b;
