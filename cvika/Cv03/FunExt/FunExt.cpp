@@ -19,6 +19,6 @@ int main()
             maxX = x;
         }
     }
-    printf("Minimum value: %lf at x=%d\n", maxY, maxX);
+    printf("Maximum value: %lf at x=%d\n", maxY, maxX);
     return 0;
 }
