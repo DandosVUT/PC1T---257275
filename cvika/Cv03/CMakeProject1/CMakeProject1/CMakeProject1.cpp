@@ -6,12 +6,13 @@ int main()
 {
 	int a;
 	int b;
+	printf("zadejte velikost ctvercu A a B : \n");
 	scanf_s("%d", &a);
 	scanf_s("%d", &b);
 	int obvodA = 4 * a;
-	int obsahA = a ^ 2;
+	int obsahA = (a * a);
 	int obvodB = 4 * b;
-	int obsahB = b ^ 2;
+	int obsahB = (b * b);
 	printf("obvod ctverce A: %d\n", obvodA);
 	printf("obsah ctverce A: %d\n", obsahA);
 	printf("obvod ctverce B: %d\n", obvodB);
