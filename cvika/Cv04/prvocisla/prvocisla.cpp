@@ -20,6 +20,7 @@ int isPrime(int cislo)
 
 int main()
 {
+	printf("%d\n", isPrime(2));
 	printf("%d\n", isPrime(5));
 	printf("%d\n", isPrime(9));
 	printf("%d\n", isPrime(62));
