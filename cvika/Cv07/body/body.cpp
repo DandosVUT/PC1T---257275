@@ -32,7 +32,7 @@ double prumernaVzdalenost(int velikost, int(*poleBodu)[2], int referencniX, int 
 	for (int i = 0; i <= velikost; i++)
 	{
 		vzdalenost = sqrt(((referencniX - poleBodu[i][0]) ^ 2) + ((referencniY - poleBodu[i][1]) ^ 2));
-		soucet = soucet + vzdalenost;
+		soucet += vzdalenost;
 	}
 
 	return (soucet / velikost);
@@ -54,9 +54,9 @@ int main()
 	int X;
 	int Y;
 	printf("Zadejte souradnice referencniho bodu X: \n");
-	scanf_s(" %d", &X);
+	scanf_s("%d", &X);
 	printf("Zadejte souradnice referencniho bodu Y: \n");
-	scanf_s(" %d", &Y);
+	scanf_s("%d", &Y);
 
 	int blizky = indexNejblizsi(10, body, X, Y);
 	double prumer = prumernaVzdalenost(10, body, X, Y);
