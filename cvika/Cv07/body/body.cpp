@@ -12,20 +12,18 @@ using namespace std;
 int indexNejblizsi(int velikost, int(*poleBodu)[2], int referencniX, int referencniY) {
 	double vzdalenost;
 	double nejblizsi = 100;
-	int indexX;
-	int indexY;
+	int index = 0;
 	for (int i = 0; i <= velikost; i++)
 	{
 		vzdalenost = sqrt(((referencniX - poleBodu[i][0]) ^ 2) + ((referencniY - poleBodu[i][1]) ^ 2));
 		if (vzdalenost < nejblizsi)
 		{
 			nejblizsi = vzdalenost;
-			indexX = poleBodu[i][0];
-			indexY = poleBodu[i][1];
+			index = i;
 		}
 	}
 
-	return (indexX, indexY);
+	return index;
 }
 
 double prumernaVzdalenost(int velikost, int(*poleBodu)[2], int referencniX, int referencniY) {
@@ -53,16 +51,18 @@ int main()
 		75,7,
 		-25,51,
 		17,98 };
-	int X, Y;
+	int X;
+	int Y;
 	printf("Zadejte souradnice referencniho bodu X: \n");
-	scanf("%d", &X);
+	scanf_s(" %d", &X);
 	printf("Zadejte souradnice referencniho bodu Y: \n");
-	scanf("%d", &Y);
+	scanf_s(" %d", &Y);
 
-	indexNejblizsi(10, body, X, Y);
+	int blizky = indexNejblizsi(10, body, X, Y);
+	double prumer = prumernaVzdalenost(10, body, X, Y);
 
-	printf("nejblizsi bod je: %d\n", indexNejblizsi);
-	printf("prumerna vzdalenost od referencniho bodu je: %d\n", prumernaVzdalenost);
+	printf("nejblizsi bod je: %d\n", blizky);
+	printf("prumerna vzdalenost od referencniho bodu je: %f\n", prumer);
 
 	return 0;
 }
