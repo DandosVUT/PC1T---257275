@@ -3,7 +3,7 @@
 #
 
 # Add source to this project's executable.
-add_executable (CMakeTarget "Hra had.cpp" "Hra had.h")
+add_executable (CMakeTarget "Hra_had.cpp" "Hra_had.h" "struktury.cpp")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET CMakeTarget PROPERTY CXX_STANDARD 20)
