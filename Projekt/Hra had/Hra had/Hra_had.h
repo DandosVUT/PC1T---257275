@@ -6,16 +6,13 @@
 struct had
 {
 	int delka;
-	int x;
-	int y;
+	char smer;
+
 };
 
-struct mapa
-{
-	int vyska;
-	int sirka;
-};
 
 void hraci_pole(int (*okraj)[VELIKOST_POLE]);
 
 void vykresleni(int(*okraj)[VELIKOST_POLE]);
+
+void pohyb(int WSAD, struct had H);
