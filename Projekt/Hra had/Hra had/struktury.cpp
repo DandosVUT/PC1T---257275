@@ -32,8 +32,8 @@ void vykresleni(int (*okraj)[VELIKOST_POLE])
 		}
 }
 
-void pohyb(int WSAD, struct had H) //WSAD reprezentovane jako 0,1,2,3 respektive. Nejspis to lze udelat lepe? 
-								   //smer reprezentovany jako 'S','J','V','Z' podle svet stran
+void zmena_smeru(int WSAD, struct had H) //WSAD reprezentovane jako 0,1,2,3 respektive. Nejspis to lze udelat lepe? 
+//smer reprezentovany jako 'S','J','V','Z' podle svet stran
 {
 	switch (H.smer) {
 	case 'S':
@@ -57,4 +57,17 @@ void pohyb(int WSAD, struct had H) //WSAD reprezentovane jako 0,1,2,3 respektive
 		break;
 	}
 
+	}
 }
+
+/*void delka_hada(struct had H)
+{
+	if () //had sezere ovoce
+		H.delka += 1;
+}*/
+
+void pozice_hada(int (*pozice)[VELIKOST_POLE], struct had H)
+{
+
+}
+
