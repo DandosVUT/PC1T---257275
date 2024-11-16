@@ -3,6 +3,11 @@
 #include <iostream>
 #define VELIKOST_POLE 10
 
+
+void uvodni_menu();
+
+void konec_hry();
+
 struct souradnice
 {
 	int x[VELIKOST_POLE];
@@ -14,15 +19,16 @@ struct had
 	int delka;
 	char smer;
 	struct souradnice telo;
+	int skore;
 
 };
 
-void hraci_pole(int (*okraj)[VELIKOST_POLE]);
+void hraci_pole(int (*okraj)[VELIKOST_POLE], struct had H);
 
-void vykresleni(int (*okraj)[VELIKOST_POLE]);
+void vykresleni(int(*okraj)[VELIKOST_POLE]);
 
 void zmena_smeru(int WSAD, struct had H);
 
-//void delka_hada(struct had H);
+int kontrola_prekazky(int(*okraj)[VELIKOST_POLE], struct had H);
 
-void pozice_hada(int (*pozice)[VELIKOST_POLE], struct had H);
+void pohyb_hada(struct had H);
