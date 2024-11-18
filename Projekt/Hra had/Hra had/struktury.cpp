@@ -33,10 +33,10 @@ void hraci_pole(int (*okraj)[VELIKOST_POLE], struct had H)
 				okraj[i][VELIKOST_POLE - 1] = 2;
 		}
 
-	/*for (int i = 0; i < VELIKOST_POLE; i++) // zadani hada do hr.pole
+	for (int i = 0; i < VELIKOST_POLE; i++) // zadani hada do hr.pole
 	{
 		okraj[H.telo.x[i]][H.telo.y[i]] = 3;
-	}*/
+	}
 
 	int r1 = rand() % (VELIKOST_POLE - 1); // generovani ovoce
 	int r2 = rand() % (VELIKOST_POLE - 1);
