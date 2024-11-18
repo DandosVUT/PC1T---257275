@@ -1,7 +1,7 @@
 ﻿
 #include "Hra_had.h"
 
-#define VELIKOST_POLE 10
+#define VELIKOST_POLE 30
 
 using namespace std;
 
@@ -30,8 +30,8 @@ int main()
 	int k = kontrola_prekazky(mapa, H); // z duvodu aby probehla i kontrola prekazky v pripade, kdy had narazi na ovoce
 	if (k == 1)
 		konec_hry();
-	WSAD = getchar(); // bude to fungovat?? kazdopadne potreba moznosti zmeny smeru
-	zmena_smeru(WSAD, H);
+	//WSAD = getchar(); // bude to fungovat?? kazdopadne potreba moznosti zmeny smeru
+	//zmena_smeru(WSAD, H);
 
 
 	return 0;

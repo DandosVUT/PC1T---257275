@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include <iostream>
-#define VELIKOST_POLE 10
+#define VELIKOST_POLE 30
 
 
 void uvodni_menu();
