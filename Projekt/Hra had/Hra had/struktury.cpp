@@ -1,14 +1,12 @@
 
 #include "Hra_had.h"
 
-
 void uvodni_menu()
 {
 	printf("				 Vitejte ve hre HAD \n\n\n");
 	printf("	zacit hrat \n");
 	printf("	tabulka vysledku \n");
 	printf("	kredity \n");
-
 }
 
 void konec_hry()
@@ -33,10 +31,10 @@ void hraci_pole(int (*okraj)[VELIKOST_POLE], struct had H)
 				okraj[i][VELIKOST_POLE - 1] = 2;
 		}
 
-	for (int i = 0; i < VELIKOST_POLE; i++) // zadani hada do hr.pole
-	{
-		okraj[H.telo.x[i]][H.telo.y[i]] = 3;
-	}
+	// for (int i = 0; i < VELIKOST_POLE; i++) // zadani hada do hr.pole
+	// {
+	// 	okraj[H.telo.x[i]][H.telo.y[i]] = 3;
+	// }
 
 	int r1 = rand() % (VELIKOST_POLE - 1); // generovani ovoce
 	int r2 = rand() % (VELIKOST_POLE - 1);
@@ -49,11 +47,16 @@ void vykresleni(int (*okraj)[VELIKOST_POLE])
 	for (int i = 0; i < VELIKOST_POLE; i++)
 		for (int j = 0; j < VELIKOST_POLE; j++)
 		{
-			if (okraj[i][j] = 2)
+			
+			if (okraj[i][j] == 2)
 				printf(".");
 			else if (okraj[i][j] == 1)
 				printf("*");
 			else printf(" ");
+			if (j == VELIKOST_POLE - 1)
+			{
+				printf("\n");
+			}
 		}
 }
 
@@ -85,7 +88,6 @@ void zmena_smeru(int WSAD, struct had H) //WSAD reprezentovane jako 0,1,2,3 resp
 	}
 }
 
-
 int kontrola_prekazky(int(*okraj)[VELIKOST_POLE], struct had H)
 {
 	switch (okraj[H.telo.x[0]][H.telo.y[0]]) {
@@ -103,7 +105,6 @@ int kontrola_prekazky(int(*okraj)[VELIKOST_POLE], struct had H)
 
 	return 0;
 }
-
 
 void pohyb_hada(struct had H)
 {
