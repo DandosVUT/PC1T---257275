@@ -7,6 +7,7 @@ void uvodni_menu()
 	printf("	zacit hrat \n");
 	printf("	tabulka vysledku \n");
 	printf("	kredity \n");
+	printf("pokus");
 }
 
 void konec_hry()
