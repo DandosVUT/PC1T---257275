@@ -1,5 +1,6 @@
 ﻿
 #include "Hra_had.h"
+#include "struktury.cpp"
 
 #define VELIKOST_POLE 30
 
@@ -32,7 +33,6 @@ int main()
 		konec_hry();
 	//WSAD = getchar(); // bude to fungovat?? kazdopadne potreba moznosti zmeny smeru
 	//zmena_smeru(WSAD, H);
-
 
 	return 0;
 }
