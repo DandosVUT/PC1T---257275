@@ -1,0 +1,4 @@
+pocet pismen je: 71
+pocet cisel je: 7
+delky jednotlivych slov jsou: 
+102, 
