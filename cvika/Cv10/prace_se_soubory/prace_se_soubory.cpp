@@ -9,8 +9,8 @@ int main()
 {
 	FILE* vstup;
 	FILE* vysledky;
-	const char* soubor = "C:/Users/lewro/source/repos/DandosVUT/PC1T---257275/cvika/Cv10/prace_se_soubory/vstup.txt";
-	const char* soubor2 = "C:/Users/lewro/source/repos/DandosVUT/PC1T---257275/cvika/Cv10/prace_se_soubory/vysledky.txt";
+	const char* soubor = "cvika/Cv10/prace_se_soubory/vstup.txt";
+	const char* soubor2 = "cvika/Cv10/prace_se_soubory/vysledky.txt";
 
 	if (fopen_s(&vstup, soubor, "r") != 0)
 	{
