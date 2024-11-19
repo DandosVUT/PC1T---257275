@@ -8,7 +8,7 @@ using namespace std;
 int main()
 {
 	FILE* vstup;
-	const char* soubor = "C:\\Users\\student.DESKTOP - P9NC5QO\\Documents\\vstup.txt";
+	const char* soubor = "D:\\vstup.txt";
 
 	if (fopen_s(&vstup, soubor, "r") != 0)
 	{
