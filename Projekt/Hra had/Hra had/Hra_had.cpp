@@ -20,7 +20,7 @@ int main()
 		H.telo.x[i] = 5;
 		H.telo.y[i] = 5 - i;
 	} 
-	int WSAD;
+	//int WSAD;
 
 	uvodni_menu(); // je treba dodelat rozdeleni, kdy se zapne hra a kdy napr. jen tabulka vysledku apod.
 
