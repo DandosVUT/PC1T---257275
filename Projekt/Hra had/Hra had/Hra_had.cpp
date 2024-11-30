@@ -1,7 +1,8 @@
-﻿#include "struktury.cpp"
+﻿#include "Hra_had.h"
 #include <cstdlib>
 #include <ctime>
-#include <termios.h>
+#include <fcntl.h>
+#include <conio.h>
 
 #define VELIKOST_POLE 30
 #define MAX_HRACU 10
@@ -16,11 +17,11 @@ int main()
     printf("1. Zacit hrat \n");
     printf("2. Tabulka vysledku \n");
 
-    printf("Vyberte si číslo: ");
-    scanf("%d", &volba);
-    getchar(); // Remove newline from input buffer
+    printf("Vyberte si cislo: ");
+    scanf_s("%d", &volba);
+    //getchar(); // Remove newline from input buffer
 
-    Skore vysledky[MAX_HRACU];
+    struct Skore vysledky[MAX_HRACU];
     int pocet_vysledku = 0;
     nacti_vysledky(vysledky, &pocet_vysledku);
 
@@ -39,42 +40,31 @@ int main()
 
     // Inicializácia hada
     struct had H;
-    H.delka = 4;
-    H.smer = 'V'; // Východ
-    H.skore = 0;
+
+    // Inicializácia hada do stredu hracieho poľa
+    H.delka = 3;
+    H.smer = 'V';
+    int stred_x = VELIKOST_POLE / 2;
+    int stred_y = VELIKOST_POLE / 2;
+
     for (int i = 0; i < H.delka; i++)
     {
-        H.telo.x[i] = VELIKOST_POLE / 2;
-        H.telo.y[i] = (VELIKOST_POLE / 2) - i;
+        H.telo.x[i] = stred_x;
+        H.telo.y[i] = stred_y - i;
+        mapa[stred_x][stred_y - i] = 3; // 3 znamená telo hada
     }
-
-    // Inicializácia hry
-    srand(static_cast<unsigned>(time(0))); // Inicializácia generátora náhodných čísel
 
     // Hlavný herný cyklus
     while (true)
     {
-        // system("cls"); // Vyčistenie obrazovky (pre Windows)
+        system("cls"); // Vyčistenie obrazovky (pre Windows)
         hraci_pole(mapa, &H);
         vykresleni(mapa);
 
         // Správa vstupu hráča (zmena smeru pomocou WSAD)
-        char vstup = getchar(); // Načítanie znaku zo vstupu
-        switch (vstup)
-        {
-        case 'w':
-            zmena_smeru(0, H);
-            break; // Sever
-        case 's':
-            zmena_smeru(1, H);
-            break; // Juh
-        case 'a':
-            zmena_smeru(2, H);
-            break; // Západ
-        case 'd':
-            zmena_smeru(3, H);
-            break; // Východ
-        }
+        //char vstup = getchar(); // Načítanie znaku zo vstupu
+
+        zmena_smeru(WSAD(), &H);
 
         // Pohyb hada a kontrola prekážok
         pohyb_hada(&H, mapa);
@@ -86,20 +76,21 @@ int main()
 
             char jmeno[MAX_JMENO];
             printf("Zadejte sve jmeno: ");
-            scanf("%49s", jmeno);
+            scanf_s("%49s", jmeno, MAX_JMENO);
 
             if (pocet_vysledku < MAX_HRACU) {
-                strcpy(vysledky[pocet_vysledku].jmeno, jmeno);
+                strcpy_s(vysledky[pocet_vysledku].jmeno, jmeno);
                 vysledky[pocet_vysledku].skore = H.skore;
                 pocet_vysledku++;
             } else if (H.skore > vysledky[MAX_HRACU - 1].skore) {
-                strcpy(vysledky[MAX_HRACU - 1].jmeno, jmeno);
+                strcpy_s(vysledky[MAX_HRACU - 1].jmeno, jmeno);
                 vysledky[MAX_HRACU - 1].skore = H.skore;
             }
 
             serad_vysledky(vysledky, &pocet_vysledku);
             uloz_vysledky(vysledky, pocet_vysledku);
 
+            exit(0);
             break;
         }
         // Zrýchlenie alebo oneskorenie (riadenie času)

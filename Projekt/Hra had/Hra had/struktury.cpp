@@ -1,20 +1,15 @@
 #include "Hra_had.h"
+#include <conio.h>
 
 #define MAX_HRACU 10
 #define MAX_JMENO 50
 
-struct Skore
-{
-	char jmeno[MAX_JMENO];
-	int skore;
-};
-
-void konec_hry()
-{
-	do
-		; // vykresleni mapy, ktera se zastavi na pozici narazu
-	while (getchar() == 0);
-}
+//void konec_hry()
+//{
+//	do
+//		; // vykresleni mapy, ktera se zastavi na pozici narazu
+//	while (getchar() == 0);
+//}
 
 void vykresleni(int (*okraj)[VELIKOST_POLE])
 {
@@ -42,35 +37,7 @@ void vykresleni(int (*okraj)[VELIKOST_POLE])
 	}
 }
 
-void hraci_pole(int (*okraj)[VELIKOST_POLE], struct had *H)
-{
-	// Inicializácia hracieho poľa s hranicami
-	for (int i = 0; i < VELIKOST_POLE; i++)
-	{
-		for (int j = 0; j < VELIKOST_POLE; j++)
-		{
-			if (i == 0 || i == VELIKOST_POLE - 1 || j == 0 || j == VELIKOST_POLE - 1)
-				okraj[i][j] = 2; // Stena
-			else
-				okraj[i][j] = 0; // Voľné pole
-		}
-	}
-
-	// Inicializácia hada do stredu hracieho poľa
-	H->delka = 3;
-	H->smer = 'V';
-	int stred_x = VELIKOST_POLE / 2;
-	int stred_y = VELIKOST_POLE / 2;
-
-	for (int i = 0; i < H->delka; i++)
-	{
-		H->telo.x[i] = stred_x;
-		H->telo.y[i] = stred_y - i;
-		okraj[stred_x][stred_y - i] = 3; // 3 znamená telo hada
-	}
-}
-
-void aktualizuj_ovoce(int (*okraj)[VELIKOST_POLE])
+void aktualizuj_ovoce(int(*okraj)[VELIKOST_POLE])
 {
 	int r1, r2;
 	do
@@ -83,7 +50,7 @@ void aktualizuj_ovoce(int (*okraj)[VELIKOST_POLE])
 	okraj[r1][r2] = 1;
 }
 
-void pohyb_hada(struct had *H, int (*okraj)[VELIKOST_POLE])
+void pohyb_hada(struct had* H, int(*okraj)[VELIKOST_POLE])
 {
 	int Ax = H->telo.x[0];
 	int Ay = H->telo.y[0];
@@ -134,28 +101,56 @@ void pohyb_hada(struct had *H, int (*okraj)[VELIKOST_POLE])
 	okraj[Ax][Ay] = 3; // Aktualizácia novej hlavy
 }
 
-void zmena_smeru(int WSAD, struct had H) // WSAD reprezentovane jako 0,1,2,3 respektive. Nejspis to lze udelat lepe?
+void hraci_pole(int (*okraj)[VELIKOST_POLE], struct had *H)
+{
+	// Inicializácia hracieho poľa s hranicami
+	for (int i = 0; i < VELIKOST_POLE; i++)
+	{
+		for (int j = 0; j < VELIKOST_POLE; j++)
+		{
+			if (i == 0 || i == VELIKOST_POLE - 1 || j == 0 || j == VELIKOST_POLE - 1)
+				okraj[i][j] = 2; // Stena
+			else
+				okraj[i][j] = 0; // Voľné pole
+		}
+	}
+	aktualizuj_ovoce(okraj);
+	pohyb_hada(H, okraj);
+}
+
+int WSAD()
+{
+	char ch;
+	if (kbhit() != 0)
+	{
+		ch = getch();
+		return int(ch);
+	}
+	return 0;
+}
+
+void zmena_smeru(int WSAD, struct had *H) // WSAD reprezentovane jako 0,1,2,3 respektive. Nejspis to lze udelat lepe?
 // smer reprezentovany jako 'S','J','V','Z' podle svet stran
 {
-	switch (H.smer)
+	switch (H->smer)
 	{
 	case 'S':
 	case 'J':
 	{
-		if (WSAD == 2)
-			H.smer = 'Z';
-		else if (WSAD == 3)
-			H.smer = 'V';
+		if (WSAD == (87 || 119))
+			H->smer = 'Z';
+		else if (WSAD == (83 || 115))
+			H->smer = 'V';
 		// else neplatna klavesa?
 		break;
 	}
 	case 'V':
 	case 'Z':
 	{
-		if (WSAD == 0)
-			H.smer = 'S';
-		else if (WSAD == 1)
-			H.smer = 'J';
+		if (WSAD == (65 || 97))
+			H->smer = 'S';
+		else if (WSAD == (68 || 100))
+			H->smer = 'J';
 		// else neplatna klavesa?
 		break;
 	}
@@ -168,7 +163,7 @@ int kontrola_prekazky(int (*okraj)[VELIKOST_POLE], struct had *H)
 	int Ay = H->telo.y[0];
 
 	if (okraj[Ax][Ay] == 2 || okraj[Ax][Ay] == 3)
-		return 1;
+		return 0;
 
 	if (okraj[Ax][Ay] == 1)
 	{
@@ -176,12 +171,13 @@ int kontrola_prekazky(int (*okraj)[VELIKOST_POLE], struct had *H)
 		H->skore++;
 		aktualizuj_ovoce(okraj);
 	}
-	return 0;
+	return 1;
 }
 
 void nacti_vysledky(Skore vysledky[], int *pocet)
 {
-	FILE *soubor = fopen("vysledky.txt", "r");
+	FILE* soubor;
+	fopen_s(&soubor, "vysledky.txt", "r");
 	if (soubor != NULL)
 	{
 		*pocet = 0;
@@ -201,7 +197,8 @@ void nacti_vysledky(Skore vysledky[], int *pocet)
 
 void uloz_vysledky(Skore vysledky[], int pocet)
 {
-	FILE *soubor = fopen("vysledky.txt", "w");
+	FILE* soubor;
+	fopen_s(&soubor, "vysledky.txt", "w");
 	if (soubor != NULL)
 	{
 		for (int i = 0; i < pocet; i++)

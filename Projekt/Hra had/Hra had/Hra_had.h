@@ -2,6 +2,13 @@
 
 #include <iostream>
 #define VELIKOST_POLE 30
+#define MAX_JMENO 50
+
+struct Skore
+{
+	char jmeno[MAX_JMENO];
+	int skore;
+};
 
 
 void uvodni_menu();
@@ -23,12 +30,23 @@ struct had
 
 };
 
-void hraci_pole(int (*okraj)[VELIKOST_POLE], struct had H);
+void hraci_pole(int (*okraj)[VELIKOST_POLE], struct had* H);
 
 void vykresleni(int(*okraj)[VELIKOST_POLE]);
 
-void zmena_smeru(int WSAD, struct had H);
+int WSAD();
 
-int kontrola_prekazky(int(*okraj)[VELIKOST_POLE], struct had *H);
+void zmena_smeru(int WSAD, struct had *H);
 
-void pohyb_hada(struct had H);
+void pohyb_hada(struct had* H, int(*okraj)[VELIKOST_POLE]);
+
+int kontrola_prekazky(int(*okraj)[VELIKOST_POLE], struct had* H);
+
+void nacti_vysledky(Skore vysledky[], int* pocet);
+
+void uloz_vysledky(Skore vysledky[], int pocet);
+
+void zobraz_vysledky(Skore vysledky[], int pocet);
+
+void serad_vysledky(Skore vysledky[], int* pocet);
+
