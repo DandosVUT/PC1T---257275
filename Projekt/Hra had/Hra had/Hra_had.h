@@ -29,6 +29,6 @@ void vykresleni(int(*okraj)[VELIKOST_POLE]);
 
 void zmena_smeru(int WSAD, struct had H);
 
-int kontrola_prekazky(int(*okraj)[VELIKOST_POLE], struct had H);
+int kontrola_prekazky(int(*okraj)[VELIKOST_POLE], struct had *H);
 
 void pohyb_hada(struct had H);
