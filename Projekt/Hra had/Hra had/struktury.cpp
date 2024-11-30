@@ -1,5 +1,6 @@
 
 #include "Hra_had.h"
+#include <conio.h>
 
 
 void uvodni_menu()
@@ -33,7 +34,7 @@ void hraci_pole(int (*okraj)[VELIKOST_POLE], struct had H)
 				okraj[i][VELIKOST_POLE - 1] = 2;
 		}
 
-	for (int i = 0; i < VELIKOST_POLE; i++) // zadani hada do hr.pole
+	for (int i = 0; i < H.delka; i++) // zadani hada do hr.pole
 	{
 		okraj[H.telo.x[i]][H.telo.y[i]] = 3;
 	}
@@ -59,28 +60,38 @@ void vykresleni(int (*okraj)[VELIKOST_POLE])
 		}
 }
 
-void zmena_smeru(int WSAD, struct had H) //WSAD reprezentovane jako 0,1,2,3 respektive. Nejspis to lze udelat lepe? 
-//smer reprezentovany jako 'S','J','V','Z' podle svet stran
+int WSAD()
+{
+	char ch;
+	if (kbhit() != 0)
+	{
+		ch = getch();
+		return int(ch);
+	}
+	return 0;
+}
+
+void zmena_smeru(int WSAD, struct had H) //smer reprezentovany jako 'S','J','V','Z' podle svet stran
 {
 	switch (H.smer) {
 	case 'S':
 	case 'J':
 	{
-		if (WSAD == 2)
+		if (WSAD == (87 || 119))
 			H.smer = 'Z';
-		else if (WSAD == 3)
+		else if (WSAD == (83 || 115))
 			H.smer = 'V';
-		//else neplatna klavesa?
+		//else neplatna klavesa? - neni nutne
 		break;
 	}
 	case 'V':
 	case 'Z':
 	{
-		if (WSAD == 0)
+		if (WSAD == (65 || 97))
 			H.smer = 'S';
-		else if (WSAD == 1)
+		else if (WSAD ==  (68 || 100))
 			H.smer = 'J';
-		//else neplatna klavesa?
+		//else neplatna klavesa? - neni nutne
 		break;
 	}
 
@@ -96,13 +107,12 @@ int kontrola_prekazky(int(*okraj)[VELIKOST_POLE], struct had H)
 		return 1;
 	case 1:
 	{
-		//had se prodlouzi (sezral ovoce)
-		// pridat do pole tela hada dalsi dilek
-		//skore se zvysi o 1;
+		H.delka += 1;										//had se prodlouzi (sezral ovoce)
+		okraj[H.telo.x[H.delka - 1]][H.telo.y[H.delka - 1]] = 3;	// pridat do pole tela hada dalsi dilek
+		H.skore += 1;										//skore se zvysi o 1;
 		break;
 	}
 	}
-
 	return 0;
 }
 
