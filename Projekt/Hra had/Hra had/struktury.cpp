@@ -7,7 +7,10 @@
 //void konec_hry()
 //{
 //	do
-//		; // vykresleni mapy, ktera se zastavi na pozici narazu
+//	{
+//		vykresleni;// vykresleni mapy, ktera se zastavi na pozici narazu
+//		exit(0);
+//	}
 //	while (getchar() == 0);
 //}
 
@@ -45,9 +48,30 @@ void aktualizuj_ovoce(int(*okraj)[VELIKOST_POLE])
 		r1 = rand() % (VELIKOST_POLE - 2) + 1;
 		r2 = rand() % (VELIKOST_POLE - 2) + 1;
 
-	} while (okraj[r1][r2] != 0); // Uistíme sa, že ovocie nepadne na hada ani na stenu
+	} while (okraj[r1][r2] == (2 || 3)); // Uistíme sa, že ovocie nepadne na hada ani na stenu
 
 	okraj[r1][r2] = 1;
+}
+
+int kontrola_prekazky(int(*okraj)[VELIKOST_POLE], struct had* H)
+{
+	int Ax = H->telo.x[0];
+	int Ay = H->telo.y[0];
+
+	// Kontrola kolízie s prekážkami alebo zjedenia ovocia
+	if (okraj[Ax][Ay] == 2 || okraj[Ax][Ay] == 3)
+		// Kolízia so stenou alebo vlastným telom
+		return 0;
+
+	else if (okraj[Ax][Ay] == 1)
+	{
+		// Zjedenie ovocia - had sa predĺži
+		H->delka++;
+		H->skore++;
+		aktualizuj_ovoce(okraj);
+	}
+
+	return 1;
 }
 
 void pohyb_hada(struct had* H, int(*okraj)[VELIKOST_POLE])
@@ -72,21 +96,6 @@ void pohyb_hada(struct had* H, int(*okraj)[VELIKOST_POLE])
 		break;
 	}
 
-	// Kontrola kolízie s prekážkami alebo zjedenia ovocia
-	if (okraj[Ax][Ay] == 2 || okraj[Ax][Ay] == 3)
-	{
-		// Kolízia so stenou alebo vlastným telom
-		printf("Game Over!\n");
-		exit(0);
-	}
-	else if (okraj[Ax][Ay] == 1)
-	{
-		// Zjedenie ovocia - had sa predĺži
-		H->delka++;
-		H->skore++;
-		aktualizuj_ovoce(okraj);
-	}
-
 	// Posun tela hada
 	okraj[H->telo.x[H->delka - 1]][H->telo.y[H->delka - 1]] = 0; // Vymaže posledný diel
 
@@ -98,7 +107,6 @@ void pohyb_hada(struct had* H, int(*okraj)[VELIKOST_POLE])
 
 	H->telo.x[0] = Ax;
 	H->telo.y[0] = Ay;
-	okraj[Ax][Ay] = 3; // Aktualizácia novej hlavy
 }
 
 void hraci_pole(int (*okraj)[VELIKOST_POLE], struct had *H)
@@ -114,8 +122,12 @@ void hraci_pole(int (*okraj)[VELIKOST_POLE], struct had *H)
 				okraj[i][j] = 0; // Voľné pole
 		}
 	}
-	aktualizuj_ovoce(okraj);
-	pohyb_hada(H, okraj);
+
+	// zadani hada do hr.pole
+	for (int i = 0; i < H->delka; i++)
+	{
+		okraj[H->telo.x[i]][H->telo.y[i]] = 3;
+	}
 }
 
 int WSAD()
@@ -124,13 +136,12 @@ int WSAD()
 	if (kbhit() != 0)
 	{
 		ch = getch();
-		return int(ch);
+		return (int)ch;
 	}
 	return 0;
 }
 
-void zmena_smeru(int WSAD, struct had *H) // WSAD reprezentovane jako 0,1,2,3 respektive. Nejspis to lze udelat lepe?
-// smer reprezentovany jako 'S','J','V','Z' podle svet stran
+void zmena_smeru(int WSAD, struct had *H) // smer reprezentovany jako 'S','J','V','Z' podle svet stran
 {
 	switch (H->smer)
 	{
@@ -141,7 +152,6 @@ void zmena_smeru(int WSAD, struct had *H) // WSAD reprezentovane jako 0,1,2,3 re
 			H->smer = 'Z';
 		else if (WSAD == (83 || 115))
 			H->smer = 'V';
-		// else neplatna klavesa?
 		break;
 	}
 	case 'V':
@@ -151,27 +161,9 @@ void zmena_smeru(int WSAD, struct had *H) // WSAD reprezentovane jako 0,1,2,3 re
 			H->smer = 'S';
 		else if (WSAD == (68 || 100))
 			H->smer = 'J';
-		// else neplatna klavesa?
 		break;
 	}
 	}
-}
-
-int kontrola_prekazky(int (*okraj)[VELIKOST_POLE], struct had *H)
-{
-	int Ax = H->telo.x[0];
-	int Ay = H->telo.y[0];
-
-	if (okraj[Ax][Ay] == 2 || okraj[Ax][Ay] == 3)
-		return 0;
-
-	if (okraj[Ax][Ay] == 1)
-	{
-		H->delka++;
-		H->skore++;
-		aktualizuj_ovoce(okraj);
-	}
-	return 1;
 }
 
 void nacti_vysledky(Skore vysledky[], int *pocet)

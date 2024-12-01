@@ -11,9 +11,9 @@ struct Skore
 };
 
 
-void uvodni_menu();
+//void uvodni_menu();
 
-void konec_hry();
+//void konec_hry();
 
 struct souradnice
 {
@@ -34,13 +34,15 @@ void hraci_pole(int (*okraj)[VELIKOST_POLE], struct had* H);
 
 void vykresleni(int(*okraj)[VELIKOST_POLE]);
 
+void aktualizuj_ovoce(int(*okraj)[VELIKOST_POLE]);
+
 int WSAD();
 
 void zmena_smeru(int WSAD, struct had *H);
 
-void pohyb_hada(struct had* H, int(*okraj)[VELIKOST_POLE]);
-
 int kontrola_prekazky(int(*okraj)[VELIKOST_POLE], struct had* H);
+
+void pohyb_hada(struct had* H, int(*okraj)[VELIKOST_POLE]);
 
 void nacti_vysledky(Skore vysledky[], int* pocet);
 
