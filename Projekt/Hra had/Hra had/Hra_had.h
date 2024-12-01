@@ -10,11 +10,6 @@ struct Skore
 	int skore;
 };
 
-
-//void uvodni_menu();
-
-//void konec_hry();
-
 struct souradnice
 {
 	int x[VELIKOST_POLE];
@@ -36,7 +31,7 @@ void vykresleni(int(*okraj)[VELIKOST_POLE]);
 
 void aktualizuj_ovoce(int(*okraj)[VELIKOST_POLE]);
 
-int WSAD();
+//int WSAD();
 
 void zmena_smeru(int WSAD, struct had *H);
 

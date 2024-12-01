@@ -43,7 +43,7 @@ int main()
     struct had H;
 
     // Inicializácia hada do stredu hracieho poľa
-    H.delka = 3;
+    H.delka = 4;
     H.smer = 'V';
     H.skore = 0;
     int stred_x = VELIKOST_POLE / 2;
@@ -56,15 +56,22 @@ int main()
         mapa[stred_x][stred_y - i] = 3; // 3 znamená telo hada
     }
 
+    //inicializace ovoce
+    aktualizuj_ovoce(mapa); 
+
     // Hlavný herný cyklus
     while (true)
     {
-        system("cls"); // Vyčistenie obrazovky (pre Windows)
+        system("cls");
         hraci_pole(mapa, &H);
         vykresleni(mapa);
 
         // Správa vstupu hráča (zmena smeru pomocou WSAD)
-        zmena_smeru(WSAD(), &H);
+        int vstup = getch(); // Načítanie klávesy zo vstupu (WSAD)
+        if (vstup != 0)
+        {
+            zmena_smeru(vstup, &H); // Zmena smeru hada podľa stlačenej klávesy
+        }
 
         // Pohyb hada
         pohyb_hada(&H, mapa);
@@ -73,7 +80,7 @@ int main()
         if (kontrola_prekazky(mapa, &H) == 0)
             break;
 
-        Sleep(500); // Pauza medzi cyklami (200 ms)
+        Sleep(200); // Pauza medzi cyklami (200 ms)
                     // Zrýchlenie alebo oneskorenie (riadenie času)
     }
 
@@ -83,12 +90,12 @@ int main()
     scanf_s("%49s", jmeno, MAX_JMENO);
 
     if (pocet_vysledku < MAX_HRACU) {
-        strcpy_s(vysledky[pocet_vysledku].jmeno, jmeno);
+        strcpy(vysledky[pocet_vysledku].jmeno, jmeno);
         vysledky[pocet_vysledku].skore = H.skore;
         pocet_vysledku++;
     }
     else if (H.skore > vysledky[MAX_HRACU - 1].skore) {
-        strcpy_s(vysledky[MAX_HRACU - 1].jmeno, jmeno);
+        strcpy(vysledky[MAX_HRACU - 1].jmeno, jmeno);
         vysledky[MAX_HRACU - 1].skore = H.skore;
     }
 

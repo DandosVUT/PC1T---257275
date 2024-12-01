@@ -4,15 +4,6 @@
 #define MAX_HRACU 10
 #define MAX_JMENO 50
 
-//void konec_hry()
-//{
-//	do
-//	{
-//		vykresleni;// vykresleni mapy, ktera se zastavi na pozici narazu
-//		exit(0);
-//	}
-//	while (getchar() == 0);
-//}
 
 void vykresleni(int (*okraj)[VELIKOST_POLE])
 {
@@ -68,6 +59,7 @@ int kontrola_prekazky(int(*okraj)[VELIKOST_POLE], struct had* H)
 		// Zjedenie ovocia - had sa predĺži
 		H->delka++;
 		H->skore++;
+		//okraj[Ax][Ay] = 3;
 		aktualizuj_ovoce(okraj);
 	}
 
@@ -97,8 +89,6 @@ void pohyb_hada(struct had* H, int(*okraj)[VELIKOST_POLE])
 	}
 
 	// Posun tela hada
-	okraj[H->telo.x[H->delka - 1]][H->telo.y[H->delka - 1]] = 0; // Vymaže posledný diel
-
 	for (int i = H->delka - 1; i > 0; i--)
 	{
 		H->telo.x[i] = H->telo.x[i - 1];
@@ -118,51 +108,70 @@ void hraci_pole(int (*okraj)[VELIKOST_POLE], struct had *H)
 		{
 			if (i == 0 || i == VELIKOST_POLE - 1 || j == 0 || j == VELIKOST_POLE - 1)
 				okraj[i][j] = 2; // Stena
-			else
+			else if (okraj[i][j] != 1)
 				okraj[i][j] = 0; // Voľné pole
 		}
 	}
 
 	// zadani hada do hr.pole
-	for (int i = 0; i < H->delka; i++)
+	for (int i = 0; i < H->delka - 1; i++)
 	{
 		okraj[H->telo.x[i]][H->telo.y[i]] = 3;
 	}
 }
 
-int WSAD()
-{
-	char ch;
-	if (kbhit() != 0)
-	{
-		ch = getch();
-		return (int)ch;
-	}
-	return 0;
-}
+//int WSAD()
+//{
+//	char ch;
+//	if (kbhit() != 0)
+//	{
+//		ch = getch();
+//		return (int)ch;
+//	}
+//	return 0;
+//}
 
-void zmena_smeru(int WSAD, struct had *H) // smer reprezentovany jako 'S','J','V','Z' podle svet stran
+void zmena_smeru(int vstup, struct had *H) // smer reprezentovany jako 'S','J','V','Z' podle svet stran
 {
-	switch (H->smer)
+	// Ak je smer hore ('S')
+	if (H->smer == 'S')
 	{
-	case 'S':
-	case 'J':
-	{
-		if (WSAD == (87 || 119))
+		if (vstup == 65 || vstup == 97)  // W alebo w -> zmena na hore
 			H->smer = 'Z';
-		else if (WSAD == (83 || 115))
+		else if (vstup == 68 || vstup == 100)  // S alebo s -> zmena na dole
 			H->smer = 'V';
-		break;
+		else if (vstup == 83 || vstup == 115)
+			exit(0);
 	}
-	case 'V':
-	case 'Z':
+	// Ak je smer dole ('J')
+	else if (H->smer == 'J')
 	{
-		if (WSAD == (65 || 97))
-			H->smer = 'S';
-		else if (WSAD == (68 || 100))
-			H->smer = 'J';
-		break;
+		if (vstup == 65 || vstup == 97)  // W alebo w -> zmena na hore
+			H->smer = 'Z';
+		else if (vstup == 68 || vstup == 100)  // S alebo s -> zmena na dole
+			H->smer = 'V';
+		else if (vstup == 87 || vstup == 119)
+			exit(0);
 	}
+	// Ak je smer vpravo ('V')
+	else if (H->smer == 'V')
+	{
+		if (vstup == 87 || vstup == 119)  // W alebo w -> zmena na hore
+			H->smer = 'S';
+		else if (vstup == 83 || vstup == 115)  // S alebo s -> zmena na dole
+			H->smer = 'J';
+		else if (vstup == 65 || vstup == 97)
+			exit(0);
+	}
+	// Ak je smer vľavo ('Z')
+	else if (H->smer == 'Z')
+	{
+		if (vstup == 87 || vstup == 119)  // W alebo w -> zmena na hore
+			H->smer = 'S';
+		else if (vstup == 83 || vstup == 115)  // S alebo s -> zmena na dole
+			H->smer = 'J';
+		else if (vstup == 68 || vstup == 100)
+			exit(0);
 	}
 }
 
