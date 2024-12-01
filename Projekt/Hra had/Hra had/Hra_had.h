@@ -25,19 +25,19 @@ struct had
 
 };
 
-void hraci_pole(int (*okraj)[VELIKOST_POLE], struct had* H);
+void hraci_pole(int(*okraj)[VELIKOST_POLE], struct had* H);
 
-void vykresleni(int(*okraj)[VELIKOST_POLE]);
+void vykresleni(int(*okraj)[VELIKOST_POLE], struct had* H);
 
 void aktualizuj_ovoce(int(*okraj)[VELIKOST_POLE]);
 
-//int WSAD();
+int WSAD();
 
-void zmena_smeru(int WSAD, struct had *H);
-
-int kontrola_prekazky(int(*okraj)[VELIKOST_POLE], struct had* H);
+void zmena_smeru(int WSAD, struct had* H);
 
 void pohyb_hada(struct had* H, int(*okraj)[VELIKOST_POLE]);
+
+int kontrola_prekazky(int(*okraj)[VELIKOST_POLE], struct had* H);
 
 void nacti_vysledky(Skore vysledky[], int* pocet);
 

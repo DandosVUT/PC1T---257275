@@ -17,11 +17,11 @@ int main()
     do
     {
         system("cls");
-        int volba;
         printf("Vitejte ve hre HAD \n\n");
         printf("1. Zacit hrat \n");
         printf("2. Tabulka vysledku \n");
 
+        int volba;
         printf("Vyberte si cislo: ");
         scanf_s("%d", &volba);
 
@@ -44,6 +44,7 @@ int main()
             printf("Zadejte sve jmeno: ");
             scanf_s("%49s", jmeno, MAX_JMENO);
 
+            // Inicializace mapy
             int mapa[VELIKOST_POLE][VELIKOST_POLE];
 
             // Inicializácia hada
@@ -60,39 +61,43 @@ int main()
             {
                 H.telo.x[i] = stred_x;
                 H.telo.y[i] = stred_y - i;
-                mapa[stred_x][stred_y - i] = 3; // 3 znamená telo hada
+                mapa[stred_x][stred_y - i] = 3;
             }
 
             //inicializace ovoce
             aktualizuj_ovoce(mapa);
+
+            int vstup;
 
             // Hlavný herný cyklus
             while (true)
             {
                 system("cls");
                 hraci_pole(mapa, &H);
-                vykresleni(mapa);
+                vykresleni(mapa, &H);
 
                 // Správa vstupu hráča (zmena smeru pomocou WSAD)
-                int vstup = getch(); // Načítanie klávesy zo vstupu (WSAD)
+                 // Načítanie klávesy zo vstupu (WSAD)
+                vstup = WSAD();
                 if (vstup != 0)
                 {
                     zmena_smeru(vstup, &H); // Zmena smeru hada podľa stlačenej klávesy
                 }
 
-                // Pohyb hada
                 pohyb_hada(&H, mapa);
 
                 // Kontrola prekazek a ukončenie hry, ak došlo ku kolízii
                 if (kontrola_prekazky(mapa, &H) == 0)
                     break;
 
-                Sleep(200); // Pauza medzi cyklami (200 ms)
+                if (H.skore > 20)
+                    Sleep(100);
+                else if (H.skore <= 20 && H.skore > 10)
+                    Sleep(200);
+                else Sleep(350);
             }
 
-            printf("Game Over! Skore: %d\n", H.skore); // zaznamenava puvodni inicializai H.skore (respketive 0)
-
-            const char* inputFilePath = "C:/Users/lewro/source/repos/DandosVUT/PC1T---257275/Projekt/Hra had/Hra had/vysledky.txt";
+            printf("Game Over! Skore: %d\n", H.skore);
 
             if (pocet_vysledku < MAX_HRACU) {
                 strcpy(vysledky[pocet_vysledku].jmeno, jmeno);
@@ -107,7 +112,9 @@ int main()
             serad_vysledky(vysledky, &pocet_vysledku);
             uloz_vysledky(vysledky, pocet_vysledku);
         }
-        printf("\nchcete program spustit znovu?\n 1. Ano\n 2. Ne\n ");
+
+        printf("\nChcete program spustit znovu?\n 1. Ano\n 2. Ne\n ");
+        printf("Vyberte si cislo: ");
         scanf_s("%d", &hra);
 
     } while (hra == 1);

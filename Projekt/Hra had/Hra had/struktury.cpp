@@ -1,11 +1,33 @@
 #include "Hra_had.h"
 #include <conio.h>
+#include <time.h>
 
 #define MAX_HRACU 10
 #define MAX_JMENO 50
 
 
-void vykresleni(int (*okraj)[VELIKOST_POLE])
+void hraci_pole(int(*okraj)[VELIKOST_POLE], struct had* H)
+{
+	// Inicializácia hracieho poľa s hranicami
+	for (int i = 0; i < VELIKOST_POLE; i++)
+	{
+		for (int j = 0; j < VELIKOST_POLE; j++)
+		{
+			if (i == 0 || i == VELIKOST_POLE - 1 || j == 0 || j == VELIKOST_POLE - 1)
+				okraj[i][j] = 2; // Zeď
+			else if (okraj[i][j] != 1)
+				okraj[i][j] = 0; // Voľné pole
+		}
+	}
+
+	// zadani hada do hr.pole
+	for (int i = 0; i < H->delka - 1; i++)
+	{
+		okraj[H->telo.x[i]][H->telo.y[i]] = 3;
+	}
+}
+
+void vykresleni(int(*okraj)[VELIKOST_POLE], struct had* H)
 {
 	for (int i = 0; i < VELIKOST_POLE; i++)
 	{
@@ -17,10 +39,17 @@ void vykresleni(int (*okraj)[VELIKOST_POLE])
 				printf("# ");
 				break; // Stena
 			case 1:
-				printf("* ");
+				printf("\033[31m *\033[0m");
 				break; // Ovocie
 			case 3:
-				printf("O ");
+				if (H->telo.x[0] == i && H->telo.y[0] == j)
+				{
+					printf("\033[32mO \033[0m");
+				}
+				else
+				{
+					printf("O ");
+				}
 				break; // Had
 			default:
 				printf("  ");
@@ -36,34 +65,57 @@ void aktualizuj_ovoce(int(*okraj)[VELIKOST_POLE])
 	int r1, r2;
 	do
 	{
+		srand(time(NULL));
 		r1 = rand() % (VELIKOST_POLE - 2) + 1;
 		r2 = rand() % (VELIKOST_POLE - 2) + 1;
 
-	} while (okraj[r1][r2] == (2 || 3)); // Uistíme sa, že ovocie nepadne na hada ani na stenu
+	} while (okraj[r1][r2] == 2 || okraj[r1][r2] == 3); // Uistíme sa, že ovocie nepadne na hada ani na stenu
 
 	okraj[r1][r2] = 1;
+
 }
 
-int kontrola_prekazky(int(*okraj)[VELIKOST_POLE], struct had* H)
+int WSAD()
 {
-	int Ax = H->telo.x[0];
-	int Ay = H->telo.y[0];
-
-	// Kontrola kolízie s prekážkami alebo zjedenia ovocia
-	if (okraj[Ax][Ay] == 2 || okraj[Ax][Ay] == 3)
-		// Kolízia so stenou alebo vlastným telom
-		return 0;
-
-	else if (okraj[Ax][Ay] == 1)
+	char ch;
+	if (kbhit() != 0)
 	{
-		// Zjedenie ovocia - had sa predĺži
-		H->delka++;
-		H->skore++;
-		//okraj[Ax][Ay] = 3;
-		aktualizuj_ovoce(okraj);
+		ch = getch();
+		return (int)ch;
 	}
+	return 0;
+}
 
-	return 1;
+void zmena_smeru(int vstup, struct had* H) // smer reprezentovany jako 'S','J','V','Z' podle svet stran
+{
+	if (H->smer == 'S')
+	{
+		if (vstup == 65 || vstup == 97)  // A alebo a
+			H->smer = 'Z';
+		else if (vstup == 68 || vstup == 100)  // D alebo d
+			H->smer = 'V';
+	}
+	else if (H->smer == 'J')
+	{
+		if (vstup == 65 || vstup == 97)  // A alebo a
+			H->smer = 'Z';
+		else if (vstup == 68 || vstup == 100)  // D alebo d
+			H->smer = 'V';
+	}
+	else if (H->smer == 'V')
+	{
+		if (vstup == 87 || vstup == 119)  // W alebo w
+			H->smer = 'S';
+		else if (vstup == 83 || vstup == 115)  // S alebo s
+			H->smer = 'J';
+	}
+	else if (H->smer == 'Z')
+	{
+		if (vstup == 87 || vstup == 119)  // W alebo w
+			H->smer = 'S';
+		else if (vstup == 83 || vstup == 115)  // S alebo s
+			H->smer = 'J';
+	}
 }
 
 void pohyb_hada(struct had* H, int(*okraj)[VELIKOST_POLE])
@@ -99,83 +151,27 @@ void pohyb_hada(struct had* H, int(*okraj)[VELIKOST_POLE])
 	H->telo.y[0] = Ay;
 }
 
-void hraci_pole(int (*okraj)[VELIKOST_POLE], struct had *H)
+int kontrola_prekazky(int(*okraj)[VELIKOST_POLE], struct had* H)
 {
-	// Inicializácia hracieho poľa s hranicami
-	for (int i = 0; i < VELIKOST_POLE; i++)
+	int Ax = H->telo.x[0];
+	int Ay = H->telo.y[0];
+
+	// Kontrola kolízie s prekážkami alebo zjedenia ovocia
+	if (okraj[Ax][Ay] == 2 || okraj[Ax][Ay] == 3) // Kolízia so stenou alebo vlastným telom
+		return 0;
+
+	else if (okraj[Ax][Ay] == 1)
 	{
-		for (int j = 0; j < VELIKOST_POLE; j++)
-		{
-			if (i == 0 || i == VELIKOST_POLE - 1 || j == 0 || j == VELIKOST_POLE - 1)
-				okraj[i][j] = 2; // Stena
-			else if (okraj[i][j] != 1)
-				okraj[i][j] = 0; // Voľné pole
-		}
+		// Zjedenie ovocia - had sa predĺži
+		H->delka++;
+		H->skore++;
+		aktualizuj_ovoce(okraj);
 	}
 
-	// zadani hada do hr.pole
-	for (int i = 0; i < H->delka - 1; i++)
-	{
-		okraj[H->telo.x[i]][H->telo.y[i]] = 3;
-	}
+	return 1;
 }
 
-//int WSAD()
-//{
-//	char ch;
-//	if (kbhit() != 0)
-//	{
-//		ch = getch();
-//		return (int)ch;
-//	}
-//	return 0;
-//}
-
-void zmena_smeru(int vstup, struct had *H) // smer reprezentovany jako 'S','J','V','Z' podle svet stran
-{
-	// Ak je smer hore ('S')
-	if (H->smer == 'S')
-	{
-		if (vstup == 65 || vstup == 97)  // W alebo w -> zmena na hore
-			H->smer = 'Z';
-		else if (vstup == 68 || vstup == 100)  // S alebo s -> zmena na dole
-			H->smer = 'V';
-		else if (vstup == 83 || vstup == 115)
-			exit(0);
-	}
-	// Ak je smer dole ('J')
-	else if (H->smer == 'J')
-	{
-		if (vstup == 65 || vstup == 97)  // W alebo w -> zmena na hore
-			H->smer = 'Z';
-		else if (vstup == 68 || vstup == 100)  // S alebo s -> zmena na dole
-			H->smer = 'V';
-		else if (vstup == 87 || vstup == 119)
-			exit(0);
-	}
-	// Ak je smer vpravo ('V')
-	else if (H->smer == 'V')
-	{
-		if (vstup == 87 || vstup == 119)  // W alebo w -> zmena na hore
-			H->smer = 'S';
-		else if (vstup == 83 || vstup == 115)  // S alebo s -> zmena na dole
-			H->smer = 'J';
-		else if (vstup == 65 || vstup == 97)
-			exit(0);
-	}
-	// Ak je smer vľavo ('Z')
-	else if (H->smer == 'Z')
-	{
-		if (vstup == 87 || vstup == 119)  // W alebo w -> zmena na hore
-			H->smer = 'S';
-		else if (vstup == 83 || vstup == 115)  // S alebo s -> zmena na dole
-			H->smer = 'J';
-		else if (vstup == 68 || vstup == 100)
-			exit(0);
-	}
-}
-
-void nacti_vysledky(Skore vysledky[], int *pocet)
+void nacti_vysledky(Skore vysledky[], int* pocet)
 {
 	FILE* soubor;
 	const char* inputFilePath = "C:/Users/lewro/source/repos/DandosVUT/PC1T---257275/Projekt/Hra had/Hra had/vysledky.txt";
@@ -221,7 +217,7 @@ void zobraz_vysledky(Skore vysledky[], int pocet)
 	}
 }
 
-void serad_vysledky(Skore vysledky[], int *pocet)
+void serad_vysledky(Skore vysledky[], int* pocet)
 {
 	for (int i = 0; i < *pocet - 1; i++)
 	{

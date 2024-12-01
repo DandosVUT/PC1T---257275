@@ -1,10 +1,10 @@
-dansawa 2
-was 2
+dan 21
+j  6
+hrac1 6
+hrac2 2
+j 2 2
+hrac3 2
+ik 1
+dan 1
 tabulka 1
-fasew 1
-ddddddddddd 1
 ahoj 1
-ih 1
-Peter 0
-Miro 0
-mk 0
