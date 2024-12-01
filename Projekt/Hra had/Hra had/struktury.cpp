@@ -178,7 +178,8 @@ void zmena_smeru(int vstup, struct had *H) // smer reprezentovany jako 'S','J','
 void nacti_vysledky(Skore vysledky[], int *pocet)
 {
 	FILE* soubor;
-	fopen_s(&soubor, "vysledky.txt", "r");
+	const char* inputFilePath = "C:/Users/lewro/source/repos/DandosVUT/PC1T---257275/Projekt/Hra had/Hra had/vysledky.txt";
+	fopen_s(&soubor, inputFilePath, "r");
 	if (soubor != NULL)
 	{
 		*pocet = 0;
@@ -199,7 +200,8 @@ void nacti_vysledky(Skore vysledky[], int *pocet)
 void uloz_vysledky(Skore vysledky[], int pocet)
 {
 	FILE* soubor;
-	fopen_s(&soubor, "vysledky.txt", "w");
+	const char* inputFilePath = "C:/Users/lewro/source/repos/DandosVUT/PC1T---257275/Projekt/Hra had/Hra had/vysledky.txt";
+	fopen_s(&soubor, inputFilePath, "w");
 	if (soubor != NULL)
 	{
 		for (int i = 0; i < pocet; i++)
